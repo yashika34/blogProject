@@ -1,0 +1,12 @@
+[
+  {
+      "id": "1",
+      "authorId": "101",
+      "postContent": "This is my first post!"
+  },
+  {
+      "id": "2",
+      "authorId": "102",
+      "postContent": "Exploring the world of Java programming."
+  }
+]
