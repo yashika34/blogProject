@@ -1,33 +1,30 @@
 package com.yashika.blogapp;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.io.IOException;
-
 @Getter
-@EqualsAndHashCode
 @ToString
+@EqualsAndHashCode
 @Builder
+@JsonDeserialize(builder = BlogPost.BlogPostBuilder.class)
 public class BlogPost {
-    private String id;
-    private String authorId; 
-    private String postContent;
+
+    private final String id;
+    private final String authorId;
+    private final String postContent;//
 
     private BlogPost(String id, String authorId, String postContent) {
-        if (id == null || authorId == null) {
-            throw new IllegalArgumentException("Invalid input values");
-        }
+        if (id == null) throw new IllegalArgumentException("ID cannot be null");
+        if (authorId == null) throw new IllegalArgumentException("Author ID cannot be null");
+
         this.id = id;
         this.authorId = authorId;
         this.postContent = postContent;
     }
-
-    public static BlogPost fromJson(String json) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(json, BlogPost.class);
-    }
 }
+
