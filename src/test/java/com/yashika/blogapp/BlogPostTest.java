@@ -1,40 +1,46 @@
-package com.yashika.blogapp;
+package com.yashika;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yashika.blogapp.BlogPost;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BlogPostTest {
+class BlogPostTest {
 
     @Test
-    public void testValidBlogPost() {
-        BlogPost blogPost = BlogPost.builder()
+    void testBlogPostValidCreation() {
+        BlogPost post = BlogPost.builder()
                 .id("1")
-                .authorId("101")
-                .postContent("This is a valid blog post.")
+                .authorId("1")
+                .postContent("This is a test blog post")
                 .build();
 
-        assertNotNull(blogPost);
-        assertEquals("1", blogPost.getId());
-        assertEquals("101", blogPost.getAuthorId());
-        assertEquals("This is a valid blog post.", blogPost.getPostContent());
+        assertNotNull(post);
+        assertEquals("1", post.getId());
+        assertEquals("1", post.getAuthorId());
+        assertEquals("This is a test blog post", post.getPostContent());
     }
 
     @Test
-    public void testInvalidBlogPost() {
+    void testBlogPostInvalidCreation() {
         assertThrows(IllegalArgumentException.class, () -> {
-            BlogPost.builder()
-                    .id(null)
-                    .authorId("101")
-                    .postContent("Content")
-                    .build();
+            BlogPost.builder().id(null).authorId("1").postContent("Test").build();
         });
+    }
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            BlogPost.builder()
-                    .id("1")
-                    .authorId(null)
-                    .postContent("Content")
-                    .build();
-        });
+    @Test
+    void testJsonSerialization() throws Exception {
+        BlogPost post = BlogPost.builder()
+                .id("1")
+                .authorId("1")
+                .postContent("This is a test blog post")
+                .build();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(post);
+        BlogPost deserializedPost = mapper.readValue(json, BlogPost.class);
+
+        assertEquals(post, deserializedPost);
     }
 }
